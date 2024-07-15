@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Connect to MongoDB (Make sure to replace 'your_database_uri' with your actual MongoDB URI)
-mongoose.connect("mongodb+srv://Harcourt:eckankar2757101@testcluster.hlwy0.gcp.mongodb.net/opulashpere?retryWrites=true&w=majority",
+mongoose.connect("mongodb+srv://Harcourt:eckankar2757101@testcluster.hlwy0.gcp.mongodb.net/shoperose?retryWrites=true&w=majority",
  { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Create a MongoDB model for storing image URLs

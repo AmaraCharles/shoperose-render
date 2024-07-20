@@ -15,6 +15,7 @@ router.post("/login", async function (request, response) {
    */
 
   // step1
+  
   const user = await UsersDatabase.findOne({ email: email });
 
   if (user) {

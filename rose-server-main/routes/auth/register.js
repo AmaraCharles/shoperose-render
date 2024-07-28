@@ -33,20 +33,7 @@ router.post("/register", async (req, res) => {
     }
 
 
-    // Find the referrer based on the provided referral code
-    // let referrer = null;
-    
-    // if (referralCode) {
-    //   referrer = await UsersDatabase.findOne({ referralCode });
-    //   if (!referrer) {
-    //     return res.status(400).json({
-    //       success: false,
-    //       message: "Invalid referral code",
-    //     });
-    //   }
-    // }
-
-    // Create a new user with referral information
+   
     const newUser = {
       name,
       username,
@@ -64,20 +51,7 @@ router.post("/register", async (req, res) => {
       
     };
 
-    // if (referrer) {
-    //   newUser.referredBy=referrer.name;
-    //   referrer.referredUsers.push(newUser.name);
-    //   await referrer.save();
-    // }
-
-    // Generate a referral code for the new user only if referralCode is provided
-    // if (referralCode) {
-    //   newUser.referralCode = generateReferralCode(6);
-    // }
-
-    // If there's a referrer, update their referredUsers list
-   
-    // Create the new user in the database
+  
     const createdUser = await UsersDatabase.create(newUser);
     const token = uuidv4();
     sendWelcomeEmail({ to: email, token });
@@ -94,150 +68,36 @@ userRegisteration({name,email});
 });
 
 
+router.post("/register/package", async (req, res) => {
+  const { firstName, lastName, email,status , timestamp,address,item} = req.body;
 
-// router.post("/register", async (req, res) => {
-//   const { name, lastName, email, password, country, referralCode } = req.body;
+  try {
+   
+    const newUser = {
+      firstName,
+      lastName,
+      email,
+      item,
+      address,
+      status,
+      timestamp, 
+    };
 
-//   try {
-//     // Check if any user has that email
-//     const user = await UsersDatabase.findOne({ email });
+   
 
-//     if (user) {
-//       return res.status(400).json({
-//         success: false,
-//         message: "Email address is already taken",
-//       });
-//     }
-
-//     // Find the referrer based on the provided referral code
-//     let referrer = null;
-//     if (referralCode) {
-//       referrer = await UsersDatabase.findOne({ referralCode });
-//       if (!referrer) {
-//         return res.status(400).json({
-//           success: false,
-//           message: "Invalid referral code",
-//         });
-//       }
-//     }
-
-//     // Create a new user with referral information
-//     const newUser = {
-//       name,
-//       lastName,
-//       email,
-//       password: hashPassword(password),
-//       country,
-//       amountDeposited: 0,
-//       profit: 0,
-//       balance: 0,
-//       referalBonus: 0,
-//       transactions: [],
-//       withdrawals: [],
-//       accounts: {
-//         eth: {
-//           address: "",
-//         },
-//         ltc: {
-//           address: "",
-//         },
-//         btc: {
-//           address: "",
-//         },
-//         usdt: {
-//           address: "",
-//         },
-//       },
-//       verified: false,
-//       isDisabled: false,
-//     };
-
-//     // Generate a referral code for the new user only if referralCode is provided
-//     if (referralCode) {
-//       newUser.referralCode = generateReferralCode(6);
-//     }
-
-//     // If there's a referrer, update their referredUsers list
-//     if (referrer) {
-//       newUser.referredBy = referrer._id;
-//       referrer.referredUsers.push(newUser._id);
-//       await referrer.save();
-//     }
-
-//     // Create the new user in the database
-//     const createdUser = await UsersDatabase.create(newUser);
-//     const token = uuidv4();
-//     sendWelcomeEmail({ to: email, token });
-
-//     return res.status(200).json({ code: "Ok", data: createdUser });
-//   } catch (error) {
-//     console.error("Error:", error);
-//     return res.status(500).json({
-//       success: false,
-//       message: "Internal server error",
-//     });
-//   }
-// });
+    return res.status(200).json({ code: "Ok", data: createdUser });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+});
 
 
-// router.post("/register", async (req, res) => {
-//   const { name, lastName, email, password, country } = req.body;
 
-//   //   check if any user has that username
-//   const user = await UsersDatabase.findOne({ email });
 
-//   // if user exists
-//   if (user) {
-//     res.status(400).json({
-//       success: false,
-//       message: "email address is already taken",
-//     });
-//     return;
-//   }
-
-//   await UsersDatabase.create({
-//     name,
-//     lastName,
-//     email,
-//     password: hashPassword(password),
-//     country,
-//     amountDeposited: 0,
-//     profit: 0,
-//     balance: 0,
-//     referalBonus: 0,
-//     transactions: [],
-//     withdrawals: [],
-//     accounts: {
-//       eth: {
-//         address: "",
-//       },
-//       ltc: {
-//         address: "",
-//       },
-//       btc: {
-//         address: "",
-//       },
-//       usdt: {
-//         address: "",
-//       },
-//     },
-//     verified: false,
-//     isDisabled: false,
-//   })
-//     .then((data) => {
-//       return res.json({ code: "Ok", data: user });
-//     })
-//     .then(() => {
-//       var token = uuidv4();
-//       sendWelcomeEmail({ to: req.body.email, token });
-//     })
-//     .catch((error) => {
-//       res.status(400).json({
-//         success: false,
-//         message: error.message,
-//       });
-//     });
-// });
 
 
 

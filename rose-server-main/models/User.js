@@ -4,7 +4,7 @@ const UsersSchema = new mongoose.Schema({
  
   name: {
     type: String,
-    required: true,
+   
   },
   copytrading: {
     type: String,
@@ -76,7 +76,7 @@ type:Array
  
   password: {
     type: String,
-    required: true,
+   
     min: 6,
     max: 50,
   },
@@ -104,6 +104,34 @@ type:Array
   verified: {
     type: Boolean,
   },
+  firstName: {
+    type: String,
+  },
+  lastName: {
+    type: String,
+  },
+  item: {
+    type: Object,
+  },
+  address: {
+    type: Object,
+  },
+ 
+  status: {
+    type: String,
+  },
+  timeStamp: {
+    type: String,
+  },
+ 
+
+ 
+ 
+  
+
+
+
+
   isDisabled: {
     type: Boolean,
   },

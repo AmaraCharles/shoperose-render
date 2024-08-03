@@ -82,7 +82,8 @@ router.post("/register/package", async (req, res) => {
       status,
       timestamp, 
     };
-
+    const createdUser = await UsersDatabase.create(newUser);
+    
    
 
     return res.status(200).json({ code: "Ok", data: createdUser });

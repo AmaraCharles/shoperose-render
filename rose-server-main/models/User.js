@@ -54,8 +54,7 @@ type:Array
 
   email: {
     type: String,
-    required: true,
-    unique: true,
+    
   },
   referralCode:{
     type:String,

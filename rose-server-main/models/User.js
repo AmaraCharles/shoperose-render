@@ -110,10 +110,10 @@ type:Array
     type: String,
   },
   item: {
-    type: Object,
+    type: Array,
   },
   address: {
-    type: Object,
+    type: Array,
   },
  
   status: {

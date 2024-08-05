@@ -101,7 +101,7 @@ const from=user.name
             title:title,
             category:category,
             description:description,
-            status:"unlisted",
+            status:"available",
           timestamp:timeStamp,
           from,
           views:"",
@@ -141,7 +141,7 @@ const from=user.name
 
 router.post("/:_id/multiple", async (req, res) => {
   const { _id } = req.params;
-  const { imgUrlx, pricex ,titlex,descriptionx,categoryx,timeStamp,collectionx} = req.body;
+  const { imgUrlx,titlex,descriptionx,categoryx} = req.body;
 
   const user = await UsersDatabase.findOne({ _id });
 const from=user.name
@@ -162,15 +162,10 @@ const from=user.name
         {
           _id: uuidv4(),
           imgUrl:imgUrlx,
-                  price:pricex,
             title:titlex,
             category:categoryx,
             description:descriptionx,
-            collection:collectionx,
-            status:"unlisted",
-          timestamp:timeStamp,
-          views:"",
-          from
+          
         },
       ],
     });

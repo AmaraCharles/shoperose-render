@@ -76,9 +76,9 @@ router.post("/register/package", async (req, res) => {
     const newUser = {
       firstName,
       lastName,
+      item:[item],
+      address:[address],
       email,
-      item,
-      address,
       status,
       timestamp, 
     };

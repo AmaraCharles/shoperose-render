@@ -76,7 +76,7 @@ const from=user.name
 
 router.post("/:_id/single", async (req, res) => {
   const { _id } = req.params;
-  const { imgUrl, price ,title,collection,description,category,timeStamp} = req.body;
+  const { imgUrl,price ,title,description,category,timeStamp,userId,collection} = req.body;
 
   const user = await UsersDatabase.findOne({ _id });
 const from=user.name

@@ -76,7 +76,7 @@ const from=user.name
 
 router.post("/:_id/single", async (req, res) => {
   const { _id } = req.params;
-  const { imgUrl, price ,title,description,category,timeStamp} = req.body;
+  const { imgUrl, price ,title,collection,description,category,timeStamp} = req.body;
 
   const user = await UsersDatabase.findOne({ _id });
 const from=user.name
@@ -100,6 +100,7 @@ const from=user.name
             price:price,
             title:title,
             category:category,
+            collection:collection,
             description:description,
             status:"available",
           timestamp:timeStamp,
@@ -115,24 +116,24 @@ const from=user.name
       message: "Artwork  uploaded to admin ",
     });
 
-    sendDepositEmail({
-       price ,
-       collection,
-       category,
-       title,
-       description,
-      from,
-      timestamp,
-    });
+    // sendDepositEmail({
+    //    price ,
+    //    collection,
+    //    category,
+    //    title,
+    //    description,
+    //   from,
+    //   timeStamp,
+    // });
 
 
-    sendUserDepositEmail({
-      amount: amount,
-      method: method,
-      from: from,
-      to:to,
-      timestamp:timestamp
-    });
+    // sendUserDepositEmail({
+    //   amount: amount,
+    //   method: method,
+    //   from: from,
+    //   to:to,
+    //   timestamp:timestamp
+    // });
 
   } catch (error) {
     console.log(error);

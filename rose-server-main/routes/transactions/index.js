@@ -102,6 +102,7 @@ const from=user.name
             category:category,
             collection:collection,
             description:description,
+            qty:1,
             status:"available",
           timestamp:timeStamp,
           from,

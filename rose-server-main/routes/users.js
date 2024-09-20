@@ -23,7 +23,7 @@ router.get("/:email", async function (req, res, next) {
   res.status(200).json({ code: "Ok", data: user });
 });
 /*get packages*/
-router.get("/:id", async function (req, res, next) {
+router.get("/package/:id", async function (req, res, next) {
   const { id } = req.params;
 
   const user = await UsersDatabase.findOne({ _id: id });

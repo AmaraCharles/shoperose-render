@@ -69,33 +69,38 @@ userRegisteration({name,email});
 
 
 router.post("/register/package", async (req, res) => {
-  const { firstName, lastName, email,status , timestamp,address,item} = req.body;
+  const { firstName, lastName, email, status, timestamp, address, item } = req.body;
+
+  // Debugging: Log the received request body to verify the data
+  console.log("Received request body:", req.body);
 
   try {
-   
+    // Ensure the address and item are in array format
     const newUser = {
       firstName,
       lastName,
-      item:Array.isArray(item) ? item : [item],
-      address:[address],
+      item: Array.isArray(item) ? item : [item], // Ensure item is an array
+      address: Array.isArray(address) ? address : [address], // Ensure address is an array
       email,
       status,
-      timestamp, 
+      timestamp
     };
-    const createdUser = await UsersDatabase.create(newUser);
-    
-   
 
+    // Create new user in the database
+    const createdUser = await UsersDatabase.create(newUser);
+
+    // Send successful response
     return res.status(200).json({ code: "Ok", data: createdUser });
   } catch (error) {
     console.error("Error:", error);
+    
+    // Send error response in case of failure
     return res.status(500).json({
       success: false,
       message: "Internal server error",
     });
   }
 });
-
 
 
 

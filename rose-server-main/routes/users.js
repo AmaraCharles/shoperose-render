@@ -22,6 +22,21 @@ router.get("/:email", async function (req, res, next) {
 
   res.status(200).json({ code: "Ok", data: user });
 });
+/*get packages*/
+router.get("/:id", async function (req, res, next) {
+  const { id } = req.params;
+
+  const user = await UsersDatabase.findOne({ _id: id });
+
+  if (!user) {
+    res.status(404).json({ message: "user not found" });
+    return;
+  }
+
+  res.status(200).json({ code: "Ok", data: user });
+});
+
+
 
 router.get("/art/:_id/:transactionId", async function (req, res, next) {
   const { _id, transactionId } = req.params;

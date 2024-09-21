@@ -89,6 +89,7 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
     },
   });
 
+  let totalprice;
   let info = await transporter.sendMail({
     from: `${process.env.EMAIL_USER}`, // sender address
     to: `${email}`, // list of receivers
@@ -110,6 +111,7 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
         <h3>Items Ordered:</h3>
         <ul>
         ${item.map(orderItem => `
+          ${totalprice+=orderItem.price}
             <li>
                 <strong>Product:</strong> ${orderItem.title}<br>
                 <strong>Size:</strong> ${orderItem.size}<br>
@@ -131,7 +133,7 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
         <hr>
 
         <h3>Total:</h3>
-        <p><strong>$${orderTotal}</strong></p>
+        <p><strong>$${totalprice}</strong></p>
 
        
 

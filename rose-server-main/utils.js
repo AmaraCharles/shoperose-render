@@ -273,7 +273,7 @@ let deliveryEndDate = addBusinessDays(today, 7).toLocaleDateString();
         <h3>Order Details:</h3>
         <p><strong>Order Number:</strong> ${item[0]._id}</p>
         <p>Expected Delivery:3-7 business Days </p>
-<p>Please note that delivery will be made between  ${deliveryStartDate} and ${deliveryEndDate}}.</p>
+<p>Please note that delivery will be made between  ${deliveryStartDate} and ${deliveryEndDate}.</p>
 
         <hr>
 

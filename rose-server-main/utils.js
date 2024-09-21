@@ -338,8 +338,9 @@ const sendOrderCompletionToClient = async ({  firstName,lastName,email,item,addr
     html: `
     <html>
     <body style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h2>Hi Rose,</h2>
-        <p>You have a new purchase!</p>
+        <h2>Hi ${firstName}  ${lastName},</h2>
+        <p>We are pleased to inform you that your order has been successfully delivered!
+</p>
         
         <hr>
         

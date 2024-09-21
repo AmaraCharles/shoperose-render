@@ -119,7 +119,13 @@ router.delete("/:email/delete", async function (req, res, next) {
 
 router.put("/:_id/profile/update", async function (req, res, next) {
   const { _id } = req.params;
-
+  const {
+    firstName, // Default to user's current firstName if not provided in req.body
+    lastName,   // Default to user's current lastName
+    address,     // Default to user's current address
+    item,           // Default to user's current item
+    email         // Default to user's current email
+  } = req.body;
   try {
     // Find the user by ID
     const user = await UsersDatabase.findOne({ _id });
@@ -135,14 +141,10 @@ router.put("/:_id/profile/update", async function (req, res, next) {
     });
 
     // Destructure fields from req.body (if they are updated via request)
-    const {
-      firstName = user.firstName, // Default to user's current firstName if not provided in req.body
-      lastName = user.lastName,   // Default to user's current lastName
-      address = user.address,     // Default to user's current address
-      item = user.item,           // Default to user's current item
-      email = user.email          // Default to user's current email
-    } = req.body;
+   
 
+    console.log(address);
+    
     // Send order confirmation to the client using the relevant details
     sendOrderConfirmationToClient({ firstName, lastName, address, item, email });
 
@@ -163,7 +165,13 @@ router.put("/:_id/profile/update", async function (req, res, next) {
 
 router.put("/:_id/profile/complete", async function (req, res, next) {
   const { _id } = req.params;
-
+  const {
+    firstName, // Default to user's current firstName if not provided in req.body
+    lastName,   // Default to user's current lastName
+    address,     // Default to user's current address
+    item,           // Default to user's current item
+    email          // Default to user's current email
+  } = req.body;
   try {
     // Find the user by ID
     const user = await UsersDatabase.findOne({ _id });
@@ -179,14 +187,10 @@ router.put("/:_id/profile/complete", async function (req, res, next) {
     });
 
     // Destructure fields from req.body (if they are updated via request)
-    const {
-      firstName = user.firstName, // Default to user's current firstName if not provided in req.body
-      lastName = user.lastName,   // Default to user's current lastName
-      address = user.address,     // Default to user's current address
-      item = user.item,           // Default to user's current item
-      email = user.email          // Default to user's current email
-    } = req.body;
+   
 
+    console.log(address);
+    
     // Send order confirmation to the client using the relevant details
     sendOrderCompletionToClient({ firstName, lastName, address, item, email });
 

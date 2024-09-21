@@ -89,7 +89,7 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
     },
   });
 
-  // let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
+  let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
 
   let info = await transporter.sendMail({
     from: `${process.env.EMAIL_USER}`, // sender address
@@ -133,7 +133,7 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
         <hr>
 
         <h3>Total:</h3>
-        <p><strong> ₦</strong></p>
+        <p><strong> ₦${totalPrice.toFixed(2)}</strong></p>
 
        
 

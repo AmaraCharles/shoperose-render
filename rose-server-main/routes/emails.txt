@@ -1,0 +1,112 @@
+Subject: Your Order Confirmation - [Order #{{orderNumber}}]
+
+Hi {{firstName}} {{lastName}},
+
+Thank you for your purchase! We have successfully received your order, and it is now being processed. Below are the details of your order:
+
+---
+
+### Order Details:
+
+- **Order Number**: {{orderNumber}}
+- **Date**: {{orderDate}}
+
+---
+
+#### Items Ordered:
+{% for item in orderItems %}
+- **Product**: {{item.title}}
+- **Price**: ${{item.price}}
+- **Quantity**: {{item.qty}}
+{% endfor %}
+
+---
+
+### Shipping Address:
+{{address.home}},  
+{{address.city}}, {{address.state}},  
+{{address.country}}  
+**Phone**: {{address.phone}}
+
+### Total: ${{orderTotal}}
+
+You can track your order status by logging into your account or by visiting the following link: [Track My Order](https://yourstore.com/track-order/{{orderNumber}})
+
+If you have any questions, feel free to reach out to our support team at support@yourstore.com.
+
+Best regards,  
+The {{storeName}} Team
+
+
+Subject: Your Order has been Confirmed! - [Order #{{orderNumber}}]
+
+Hi {{firstName}} {{lastName}},
+
+Good news! Your order has been confirmed and is now being prepared for shipment. 
+
+---
+
+### Order Number: {{orderNumber}}
+### Expected Delivery: {{deliveryWindow}}  
+Please note that delivery will be made between {{deliveryStartDate}} and {{deliveryEndDate}}.
+
+---
+
+#### Items Ordered:
+{% for item in orderItems %}
+- **Product**: {{item.title}}
+- **Price**: ${{item.price}}
+- **Quantity**: {{item.qty}}
+{% endfor %}
+
+---
+
+### Shipping Address:
+{{address.home}},  
+{{address.city}}, {{address.state}},  
+{{address.country}}  
+**Phone**: {{address.phone}}
+
+---
+
+We will notify you once your order has been dispatched. You can check the status of your order by visiting: [Track My Order](https://yourstore.com/track-order/{{orderNumber}})
+
+Thank you for shopping with us!
+
+Best regards,  
+The {{storeName}} Team
+
+
+Subject: Your Order Has Been Delivered - [Order #{{orderNumber}}]
+
+Hi {{firstName}} {{lastName}},
+
+We are pleased to inform you that your order has been successfully delivered!
+
+---
+
+### Order Number: {{orderNumber}}
+### Delivery Date: {{deliveryDate}}
+
+---
+
+#### Items Delivered:
+{% for item in orderItems %}
+- **Product**: {{item.title}}
+- **Price**: ${{item.price}}
+- **Quantity**: {{item.qty}}
+{% endfor %}
+
+---
+
+We hope you are happy with your purchase! Your satisfaction is our top priority, and we would love to hear about your experience. If you have any concerns or feedback, please feel free to reply to this email or contact us at support@yourstore.com.
+
+As a token of our appreciation, here’s a special discount code just for you: **THANKYOU10** – Use this for 10% off your next order!
+
+Thank you for shopping with {{storeName}}.
+
+Best regards,  
+The {{storeName}} Team
+
+
+

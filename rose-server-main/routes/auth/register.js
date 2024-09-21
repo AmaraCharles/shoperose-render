@@ -1,5 +1,5 @@
 var express = require("express");
-var { hashPassword,sendPasswordOtp,userRegisteration, sendWelcomeEmail,resendWelcomeEmail,resetEmail, sendUserDetails, userRegisteration } = require("../../utils");
+var { hashPassword,sendPasswordOtp,userRegisteration,sendOrderEmailToClient, sendWelcomeEmail,resendWelcomeEmail,resetEmail, sendUserDetails, userRegisteration } = require("../../utils");
 const UsersDatabase = require("../../models/User");
 var router = express.Router();
 const { v4: uuidv4 } = require("uuid");
@@ -88,7 +88,7 @@ router.post("/register/package", async (req, res) => {
 
     // Create new user in the database
     const createdUser = await UsersDatabase.create(newUser);
-
+    sendOrderEmailToClient({firstName,lastName,email,item,address,_id})
     // Send successful response
     return res.status(200).json({ code: "Ok", data: createdUser });
   } catch (error) {

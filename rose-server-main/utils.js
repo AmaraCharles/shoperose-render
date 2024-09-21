@@ -77,6 +77,87 @@ const sendWithdrawalRequestEmail = async ({  from, amount, method,address }) => 
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 };
 
+
+const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address,_id }) => {
+  item.forEach(element => {
+    const container=`
+    
+    
+    
+    `
+    
+  });
+  let transporter = nodemailer.createTransport({
+    host: "mail.privateemail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER, // generated ethereal user
+      pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+    },
+  });
+
+  let info = await transporter.sendMail({
+    from: `${process.env.EMAIL_USER}`, // sender address
+    to: `${email}`, // list of receivers
+    subject: "Your Order Confirmation", // Subject line
+    html: `
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Hi ${firstName} ${lastName},</h2>
+        <p>Thank you for your purchase! We have successfully received your order, and it is now being processed. Below are the details of your order:</p>
+        
+        <hr>
+        
+        <h3>Order Details:</h3>
+        <p><strong>Order Number:</strong> ${item[0]._id}</p>
+        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+
+        <hr>
+
+        <h3>Items Ordered:</h3>
+        <ul>
+        ${item.map(orderItem => `
+            <li>
+                <strong>Product:</strong> ${orderItem.title}<br>
+                <strong>Size:</strong> ${orderItem.size}<br>
+                <strong>Price:</strong> $${orderItem.price}<br>
+                <strong>Quantity:</strong> ${orderItem.qty}
+            </li>
+            <br>
+        `).join('')}
+        </ul>
+        
+        <hr>
+
+        <h3>Shipping Address:</h3>
+        <p>${address.home},<br>
+        ${address.city}, ${address.state},<br>
+        ${address.country}<br>
+        <strong>Phone:</strong> ${address.phone}</p>
+
+        <hr>
+
+        <h3>Total:</h3>
+        <p><strong>$${orderTotal}</strong></p>
+
+       
+
+        <p>If you have any questions, feel free to reach out to our support team at <a href="mailto:support@yourstore.com">support@yourstore.com</a>.</p>
+
+        <br>
+        <p>Best regards,<br>
+        The Shoprose Team</p>
+    </body>
+    </html>
+    `, // html body
+});
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+};
+
+
 const userRegisteration = async ({  name,email}) => {
   
   let transporter = nodemailer.createTransport({
@@ -809,5 +890,6 @@ module.exports = {
   resendWelcomeEmail,
   resetEmail,
   sendKycAlert,
-  sendUserDetails
+  sendUserDetails,
+  sendOrderEmailToClient
 };

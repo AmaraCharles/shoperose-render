@@ -89,7 +89,8 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
     },
   });
 
-  let totalprice;
+  let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
+
   let info = await transporter.sendMail({
     from: `${process.env.EMAIL_USER}`, // sender address
     to: `${email}`, // list of receivers
@@ -111,11 +112,10 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
         <h3>Items Ordered:</h3>
         <ul>
         ${item.map(orderItem => `
-          ${totalprice+=orderItem.price}
             <li>
                 <strong>Product:</strong> ${orderItem.title}<br>
                 <strong>Size:</strong> ${orderItem.size}<br>
-                <strong>Price:</strong> $${orderItem.price}<br>
+                <strong>Price:</strong>  ₦${orderItem.price}<br>
                 <strong>Quantity:</strong> ${orderItem.qty}
             </li>
             <br>
@@ -133,11 +133,11 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
         <hr>
 
         <h3>Total:</h3>
-        <p><strong>$${totalprice}</strong></p>
+        <p><strong> ₦${totalPrice.toFixed(2)}</strong></p>
 
        
 
-        <p>If you have any questions, feel free to reach out to our support team at <a href="mailto:support@yourstore.com">support@yourstore.com</a>.</p>
+        <p>If you have any questions, feel free to reach out to our support team at <a href="mailto:support@yourstore.com">info@shoperose.com</a>.</p>
 
         <br>
         <p>Best regards,<br>
@@ -151,6 +151,238 @@ const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }
   // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 };
 
+
+const sendOrderEmailToAdmin = async ({  firstName,lastName,email,item,address }) => {
+  let transporter = nodemailer.createTransport({
+    host: "mail.privateemail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER, // generated ethereal user
+      pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+    },
+  });
+
+  let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
+
+  let info = await transporter.sendMail({
+    from: `${process.env.EMAIL_USER}`, // sender address
+    to: `info@shoprose.com`, // list of receivers
+    subject: "Your Order Confirmation", // Subject line
+    html: `
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Hi Rose,</h2>
+        <p>You have a new purchase!</p>
+        
+        <hr>
+        
+        <h3>Order Details:</h3>
+        <p><strong>Order Number:</strong> ${item[0]._id}</p>
+        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+
+        <hr>
+
+        <h3>Items Ordered:</h3>
+        <ul>
+        ${item.map(orderItem => `
+            <li>
+                <strong>Product:</strong> ${orderItem.title}<br>
+                <strong>Size:</strong> ${orderItem.size}<br>
+                <strong>Price:</strong>  ₦${orderItem.price}<br>
+                <strong>Quantity:</strong> ${orderItem.qty}
+            </li>
+            <br>
+        `).join('')}
+        </ul>
+        
+        <hr>
+
+        <h3>Shipping Address:</h3>
+        <p>${address.home},<br>
+        ${address.city}, ${address.state},<br>
+        ${address.country}<br>
+        <strong>Phone:</strong> ${address.phone}</p>
+
+        <hr>
+
+        <h3>Total:</h3>
+        <p><strong> ₦${totalPrice.toFixed(2)}</strong></p>
+
+       
+
+      
+
+        <br>
+        <p>Best regards,<br>
+        The Shoprose Team</p>
+    </body>
+    </html>
+    `, // html body
+});
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+};
+
+const sendOrderConfirmationToClient = async ({  firstName,lastName,email,item,address }) => {
+  let transporter = nodemailer.createTransport({
+    host: "mail.privateemail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER, // generated ethereal user
+      pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+    },
+  });
+
+  let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
+  function addBusinessDays(startDate, daysToAdd) {
+    let count = 0;
+    let currentDate = new Date(startDate);
+
+    while (count < daysToAdd) {
+        currentDate.setDate(currentDate.getDate() + 1);
+        // Check if the current day is not Saturday (6) or Sunday (0)
+        if (currentDate.getDay() !== 0 && currentDate.getDay() !== 6) {
+            count++;
+        }
+    }
+    return currentDate;
+}
+let today = new Date();
+let deliveryStartDate = addBusinessDays(today, 3).toLocaleDateString();
+let deliveryEndDate = addBusinessDays(today, 7).toLocaleDateString();
+
+  let info = await transporter.sendMail({
+    from: `${process.env.EMAIL_USER}`, // sender address
+    to: `${email}`, // list of receivers
+    subject: "Your Order has been Confirmed!", // Subject line
+    html: `
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Hi ${firstName} ${lastName},</h2>
+        <p>Good news! Your order has been confirmed and is now being prepared for shipment. 
+</p>
+        
+        <hr>
+        
+        <h3>Order Details:</h3>
+        <p><strong>Order Number:</strong> ${item[0]._id}</p>
+        <p>Expected Delivery:3-7 business Days </p>
+<p>Please note that delivery will be made between  ${deliveryStartDate} and ${deliveryEndDate}}.</p>
+
+        <hr>
+
+        <h3>Items Ordered:</h3>
+        <ul>
+        ${item.map(orderItem => `
+            <li>
+                <strong>Product:</strong> ${orderItem.title}<br>
+                <strong>Size:</strong> ${orderItem.size}<br>
+                <strong>Price:</strong>  ₦${orderItem.price}<br>
+                <strong>Quantity:</strong> ${orderItem.qty}
+            </li>
+            <br>
+        `).join('')}
+        </ul>
+        
+        <hr>
+
+        <h3>Shipping Address:</h3>
+        <p>${address.home},<br>
+        ${address.city}, ${address.state},<br>
+        ${address.country}<br>
+        <strong>Phone:</strong> ${address.phone}</p>
+
+        <hr>
+
+        <h3>Total:</h3>
+        <p><strong> ₦${totalPrice.toFixed(2)}</strong></p>
+
+       
+
+        <p>If you have any questions, feel free to reach out to our support team at <a href="mailto:support@yourstore.com">info@shoperose.com</a>.</p>
+
+        <br>
+        <p>Best regards,<br>
+        The Shoprose Team</p>
+    </body>
+    </html>
+    `, // html body
+});
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+};
+
+
+const sendOrderCompletionToClient = async ({  firstName,lastName,email,item,address }) => {
+  let transporter = nodemailer.createTransport({
+    host: "mail.privateemail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER, // generated ethereal user
+      pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+    },
+  });
+
+  let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
+  let truncatedOrderId = item[0]._id.slice(0, 6); // Get the first 6 characters of the order ID
+
+  let info = await transporter.sendMail({
+    from: `${process.env.EMAIL_USER}`, // sender address
+    to: `${email}`, // list of receivers
+    subject: `Your Order Has Been Delivered- [Order #${truncatedOrderId}]`, // Subject line
+    html: `
+    <html>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2>Hi Rose,</h2>
+        <p>You have a new purchase!</p>
+        
+        <hr>
+        
+        <h3>Order Details:</h3>
+        <p><strong>Order Number:</strong> ${item[0]._id}</p>
+        <p><strong>Delivery Date:</strong> ${new Date().toLocaleDateString()}</p>
+
+        <hr>
+
+        <h3>Items Delivered:</h3>
+        <ul>
+        ${item.map(orderItem => `
+            <li>
+                <strong>Product:</strong> ${orderItem.title}<br>
+                <strong>Size:</strong> ${orderItem.size}<br>
+                <strong>Price:</strong>  ₦${orderItem.price}<br>
+                <strong>Quantity:</strong> ${orderItem.qty}
+            </li>
+            <br>
+        `).join('')}
+        </ul>
+        
+        <hr>
+
+        <p>We hope you are happy with your purchase! Your satisfaction is our top priority, and we would love to hear about your experience. If you have any concerns or feedback, please feel free to reply to this email or contact us at support@yourstore.com.</p>
+
+
+Thank you for shopping with Rose.
+
+        <hr>
+      
+
+        <br>
+        <p>Best regards,<br>
+        The Shoprose Team</p>
+    </body>
+    </html>
+    `, // html body
+});
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+};
 
 const userRegisteration = async ({  name,email}) => {
   
@@ -885,5 +1117,8 @@ module.exports = {
   resetEmail,
   sendKycAlert,
   sendUserDetails,
-  sendOrderEmailToClient
+  sendOrderEmailToClient,
+  sendOrderEmailToAdmin,
+  sendOrderConfirmationToClient,
+  sendOrderCompletionToClient
 };

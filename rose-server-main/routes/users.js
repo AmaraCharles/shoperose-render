@@ -1,6 +1,6 @@
 var express = require("express");
 const UsersDatabase = require("../models/User");
-const { hashPassword } = require("../utils");
+const { hashPassword,sendOrderConfirmationToClient,sendOrderCompletionToClient } = require("../utils");
 var router = express.Router();
 
 router.get("/", async function (req, res, next) {
@@ -132,15 +132,42 @@ router.put("/:_id/profile/update", async function (req, res, next) {
       ...req.body,
     });
 
+    sendOrderConfirmationToClient({firstName,lastName,address,item,email})
+
     return res.status(200).json({
       message: "update was successful",
+      
     });
-  } catch (error) {
+     } catch (error) {
     console.log(error);
   }
 });
 
 
+router.put("/:_id/profile/complete", async function (req, res, next) {
+  const { _id } = req.params;
+
+  const user = await UsersDatabase.findOne({ _id: _id });
+
+  if (!user) {
+    res.status(404).json({ message: "user not found" });
+    return;
+  }
+
+  try {
+    await user.update({
+      ...req.body,
+    });
+    sendOrderCompletionToClient({firstName,lastName,address,item,email})
+    return res.status(200).json({
+      message: "update was successful",
+      
+    });
+    
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 
 router.put("/:_id/accounts/update", async function (req, res, next) {

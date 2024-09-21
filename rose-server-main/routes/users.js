@@ -119,17 +119,17 @@ router.delete("/:email/delete", async function (req, res, next) {
 
 router.put("/:_id/profile/update", async function (req, res, next) {
   const { _id } = req.params;
-
+  const {
+    firstName, // Default to user's current firstName if not provided in req.body
+    lastName,   // Default to user's current lastName
+    address,     // Default to user's current address
+    item,           // Default to user's current item
+    email         // Default to user's current email
+  } = req.body;
   try {
     // Find the user by ID
     const user = await UsersDatabase.findOne({ _id });
-    const {
-      firstName, // Default to user's current firstName if not provided in req.body
-      lastName,   // Default to user's current lastName
-      address,     // Default to user's current address
-      item,           // Default to user's current item
-      email         // Default to user's current email
-    } = req.body;
+   
     // If user is not found, send a 404 response
     if (!user) {
       return res.status(404).json({ message: "User not found" });

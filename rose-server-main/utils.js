@@ -236,7 +236,10 @@ const sendOrderConfirmationToClient = async ({  firstName,lastName,email,item,ad
     },
   });
 
-  let totalPrice = item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0);
+  let totalPrice = Array.isArray(item) 
+  ? item.reduce((sum, orderItem) => sum + (orderItem.price * orderItem.qty), 0) 
+  : 0;
+
   function addBusinessDays(startDate, daysToAdd) {
     let count = 0;
     let currentDate = new Date(startDate);

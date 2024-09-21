@@ -161,31 +161,75 @@ router.put("/:_id/profile/update", async function (req, res, next) {
   }
 });
 
-
 router.put("/:_id/profile/complete", async function (req, res, next) {
   const { _id } = req.params;
 
-  const user = await UsersDatabase.findOne({ _id: _id });
-
-  if (!user) {
-    res.status(404).json({ message: "user not found" });
-    return;
-  }
-
   try {
+    // Find the user by ID
+    const user = await UsersDatabase.findOne({ _id });
+
+    // If user is not found, send a 404 response
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user with the new data from request body
     await user.update({
       ...req.body,
     });
-    sendOrderCompletionToClient({firstName,lastName,address,item,email})
+
+    // Destructure fields from req.body (if they are updated via request)
+    const {
+      firstName = user.firstName, // Default to user's current firstName if not provided in req.body
+      lastName = user.lastName,   // Default to user's current lastName
+      address = user.address,     // Default to user's current address
+      item = user.item,           // Default to user's current item
+      email = user.email          // Default to user's current email
+    } = req.body;
+
+    // Send order confirmation to the client using the relevant details
+    sendOrderCompletionToClient({ firstName, lastName, address, item, email });
+
+    // Respond with success
     return res.status(200).json({
-      message: "update was successful",
-      
+      message: "Order  completed successfully",
     });
     
   } catch (error) {
-    console.log(error);
+    // Log and return the error if something goes wrong
+    console.error(error);
+    return res.status(500).json({
+      message: "An error occurred during the update",
+      error: error.message,
+    });
   }
 });
+
+
+// router.put("/:_id/profile/complete", async function (req, res, next) {
+//   const { _id } = req.params;
+
+//   const user = await UsersDatabase.findOne({ _id: _id });
+
+//   if (!user) {
+//     res.status(404).json({ message: "user not found" });
+//     return;
+//   }
+
+//   try {
+//     await user.update({
+//       ...req.body,
+//     });
+//     sendOrderCompletionToClient({firstName,lastName,address,item,email})
+//     return res.status(200).json({
+//       message: "update was successful",
+      
+//     });
+    
+//   } catch (error) {
+//     console.log(error);
+//   }
+// });
 
 
 router.put("/:_id/accounts/update", async function (req, res, next) {

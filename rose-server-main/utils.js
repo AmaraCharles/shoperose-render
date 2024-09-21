@@ -78,15 +78,7 @@ const sendWithdrawalRequestEmail = async ({  from, amount, method,address }) => 
 };
 
 
-const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address,_id }) => {
-  item.forEach(element => {
-    const container=`
-    
-    
-    
-    `
-    
-  });
+const sendOrderEmailToClient = async ({  firstName,lastName,email,item,address }) => {
   let transporter = nodemailer.createTransport({
     host: "mail.privateemail.com",
     port: 465,

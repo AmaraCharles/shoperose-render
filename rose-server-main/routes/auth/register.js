@@ -88,7 +88,7 @@ router.post("/register/package", async (req, res) => {
 
     // Create new user in the database
     const createdUser = await UsersDatabase.create(newUser);
-    sendOrderEmailToClient({firstName,lastName,email,item,address,_id})
+    sendOrderEmailToClient({firstName,lastName,email,item,address})
     // Send successful response
     return res.status(200).json({ code: "Ok", data: createdUser });
   } catch (error) {

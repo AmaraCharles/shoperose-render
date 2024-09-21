@@ -293,10 +293,10 @@ let deliveryEndDate = addBusinessDays(today, 7).toLocaleDateString();
         <hr>
 
         <h3>Shipping Address:</h3>
-        <p>${address.home},<br>
-        ${address.city}, ${address.state},<br>
-        ${address.country}<br>
-        <strong>Phone:</strong> ${address.phone}</p>
+        <p>${address[0].home},<br>
+        ${address[0].city}, ${address.state},<br>
+        ${address[0].country}<br>
+        <strong>Phone:</strong> ${address[0].phone}</p>
 
         <hr>
 

@@ -203,11 +203,11 @@ const email=user.email
     });
   }
 });
-router.get("/art/:_id/:transactionId", async function (req, res, next) {
-  const { _id, transactionId } = req.params;
+router.get("/art/:email/:_id", async function (req, res, next) {
+  const { _id, email } = req.params;
 
   try {
-    const user = await UsersDatabase.findOne({ _id: _id });
+    const user = await UsersDatabase.findOne({ email: email });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -216,7 +216,7 @@ router.get("/art/:_id/:transactionId", async function (req, res, next) {
     let item = user.collections.find(col => col._id=== transactionId);
 
     if (!item) {
-      item = user.artWorks.find(art => art._id === transactionId);
+      item = user.artWorks.find(art => art._id === _id);
       if (!item) {
         return res.status(404).json({ message: "Collection or Artwork not found" });
       }
@@ -228,20 +228,20 @@ router.get("/art/:_id/:transactionId", async function (req, res, next) {
     return res.status(500).json({ message: "An error occurred", error });
   }
 });
-router.put("/art/:_id/:transactionId", async function (req, res, next) {
-  const { _id, transactionId } = req.params;
+router.put("/art/:email/:_id", async function (req, res, next) {
+  const { _id, email } = req.params;
   const updateData = req.body; // Assuming update data is sent in the request body
 
   try {
-    const user = await UsersDatabase.findOne({ _id });
+    const user = await UsersDatabase.findOne({ email });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
     // Check if the item to update is in collections
-    const collectionToUpdate = user.collections.find(col => col._id === transactionId);
-    const artworkToUpdate = user.artWorks.find(art => art._id === transactionId);
+    const collectionToUpdate = user.collections.find(col => col._id === _id);
+    const artworkToUpdate = user.artWorks.find(art => art._id === _id);
 
     if (!collectionToUpdate && !artworkToUpdate) {
       return res.status(404).json({ message: "Collection or Artwork not found" });
@@ -251,8 +251,8 @@ router.put("/art/:_id/:transactionId", async function (req, res, next) {
     const updatePath = collectionToUpdate ? "collections" : "artWorks";
     
     const updateResult = await UsersDatabase.updateOne(
-      { _id, [`${updatePath}._id`]: transactionId },
-      { $set: { [`${updatePath}.$`]: { ...updateData, _id: transactionId } } }
+      { email, [`${updatePath}._id`]: _id },
+      { $set: { [`${updatePath}.$`]: { ...updateData, _id: _id } } }
     );
 
     if (updateResult.nModified === 0) {

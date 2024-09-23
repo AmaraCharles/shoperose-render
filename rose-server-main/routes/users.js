@@ -203,6 +203,69 @@ const email=user.email
     });
   }
 });
+router.get("/art/:_id/:transactionId", async function (req, res, next) {
+  const { _id, transactionId } = req.params;
+
+  try {
+    const user = await UsersDatabase.findOne({ _id: _id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    let item = user.collections.find(col => col._id=== transactionId);
+
+    if (!item) {
+      item = user.artWorks.find(art => art._id === transactionId);
+      if (!item) {
+        return res.status(404).json({ message: "Collection or Artwork not found" });
+      }
+    }
+    
+    return res.status(200).json({ code: "Ok", data: item });
+  } catch (error) {
+    console.error('Error:', error);
+    return res.status(500).json({ message: "An error occurred", error });
+  }
+});
+router.put("/art/:_id/:transactionId", async function (req, res, next) {
+  const { _id, transactionId } = req.params;
+  const updateData = req.body; // Assuming update data is sent in the request body
+
+  try {
+    const user = await UsersDatabase.findOne({ _id });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check if the item to update is in collections
+    const collectionToUpdate = user.collections.find(col => col._id === transactionId);
+    const artworkToUpdate = user.artWorks.find(art => art._id === transactionId);
+
+    if (!collectionToUpdate && !artworkToUpdate) {
+      return res.status(404).json({ message: "Collection or Artwork not found" });
+    }
+
+    // Determine the update path based on whether it is in collections or artWorks
+    const updatePath = collectionToUpdate ? "collections" : "artWorks";
+    
+    const updateResult = await UsersDatabase.updateOne(
+      { _id, [`${updatePath}._id`]: transactionId },
+      { $set: { [`${updatePath}.$`]: { ...updateData, _id: transactionId } } }
+    );
+
+    if (updateResult.nModified === 0) {
+      return res.status(404).json({ message: "No changes made" });
+    }
+
+    return res.status(200).json({ code: "Ok", message: "Update successful" });
+  } catch (error) {
+    console.error('Error:', error.message);
+    return res.status(500).json({ message: "An error occurred", error: error.message });
+  }
+});
+
 
 
 // router.put("/:_id/profile/complete", async function (req, res, next) {

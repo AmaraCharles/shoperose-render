@@ -204,22 +204,48 @@ const email=user.email
   }
 });
 // GET route to retrieve specific collection or artwork by email and _id
-router.get("/art/:email/:_id", async function (req, res, next) {
-  const { _id, email } = req.params;
+// router.get("/art/:email/:_id", async function (req, res, next) {
+//   const { _id, email } = req.params;
+
+//   try {
+//     // Find the user by email
+//     const user = await UsersDatabase.findOne({ email });
+
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Try finding the item in collections or artworks
+//     let item = user.collections.find(col => col._id.toString() === _id);
+
+//     if (!item) {
+//       item = user.artWorks.find(art => art._id.toString() === _id);
+//       if (!item) {
+//         return res.status(404).json({ message: "Collection or Artwork not found" });
+//       }
+//     }
+    
+//     return res.status(200).json({ code: "Ok", data: item });
+//   } catch (error) {
+//     console.error('Error:', error);
+//     return res.status(500).json({ message: "An error occurred", error });
+//   }
+// });
+
+router.get("/art/:_id/:transactionId", async function (req, res, next) {
+  const { _id, transactionId } = req.params;
 
   try {
-    // Find the user by email
-    const user = await UsersDatabase.findOne({ email });
+    const user = await UsersDatabase.findOne({ _id: _id });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Try finding the item in collections or artworks
-    let item = user.collections.find(col => col._id.toString() === _id);
+    let item = user.collections.find(col => col._id=== transactionId);
 
     if (!item) {
-      item = user.artWorks.find(art => art._id.toString() === _id);
+      item = user.artWorks.find(art => art._id === transactionId);
       if (!item) {
         return res.status(404).json({ message: "Collection or Artwork not found" });
       }
@@ -231,6 +257,7 @@ router.get("/art/:email/:_id", async function (req, res, next) {
     return res.status(500).json({ message: "An error occurred", error });
   }
 });
+
 
 // PUT route to update specific collection or artwork by email and _id
 router.put("/art/:email/:_id", async function (req, res, next) {

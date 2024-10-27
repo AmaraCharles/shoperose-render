@@ -146,7 +146,7 @@ router.post("/:_id/multiple", async (req, res) => {
   const { imgUrl,title,description,timeStamp} = req.body;
 
   const user = await UsersDatabase.findOne({ _id });
-const from=user.name
+
   if (!user) {
     res.status(404).json({
       success: false,

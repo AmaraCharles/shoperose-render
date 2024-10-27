@@ -178,25 +178,7 @@ const from=user.name
       message: "Artwork  uploaded to admin ",
     });
 
-    sendDepositEmail({
-       price ,
-       collection,
-       category,
-       title,
-       description,
-      from,
-      timestamp,
-    });
-
-
-    sendUserDepositEmail({
-      amount: amount,
-      method: method,
-      from: from,
-      to:to,
-      timestamp:timestamp
-    });
-
+   
   } catch (error) {
     console.log(error);
   }
